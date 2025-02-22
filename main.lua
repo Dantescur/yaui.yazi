@@ -1,14 +1,15 @@
---- my-plugin/init.lua
-local M = {
-	keys = {
-		{ on = "q", run = "quit" },
-		{ on = "k", run = "up" },
-		{ on = "j", run = "down" },
-		{ on = "l", run = "enter" },
-	},
+local M = {}
+M.__index = M
+
+-- Define keys as before
+M.keys = {
+	{ on = "q", run = "quit" },
+	{ on = "k", run = "up" },
+	{ on = "j", run = "down" },
+	{ on = "l", run = "enter" },
 }
 
--- Plugin state management
+-- Plugin state management using ya.sync
 local state = ya.sync(function(self)
 	return {
 		visible = false,
@@ -30,6 +31,14 @@ local toggle_ui = ya.sync(function(self)
 	self.state.visible = not self.state.visible
 	ya.render()
 end)
+
+-- Constructor: Initialize plugin instance and state
+function M:new(area)
+	local self = setmetatable({}, M)
+	self.state = state(self)
+	self:layout(area)
+	return self
+end
 
 -- Core plugin functions
 function M:entry()
@@ -126,9 +135,11 @@ end
 function M:layout(area)
 	self._area = area
 end
+
 function M:reflow()
 	return { self }
 end
+
 function M:click() end
 function M:scroll() end
 function M:touch() end
