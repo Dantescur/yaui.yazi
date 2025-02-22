@@ -1,9 +1,6 @@
 --- @since 1.0.0
 -- Minimal bootstrap for YA Plugin Manager for Yazi with hardcoded data
 
-local ya = require("ya")
-local ui = require("ui")
-
 -- Toggle the plugin manager UI (optional, for showing/hiding)
 local toggle_ui = ya.sync(function(self)
 	if self.children then
